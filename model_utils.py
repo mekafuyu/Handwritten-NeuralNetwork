@@ -29,11 +29,17 @@ class DefaultModel:
     else:
       self.model = models.Sequential([
         layers.Resizing(64, 64),
-        layers.RandomCrop(100, 100),
+        # layers.RandomCrop(100, 100),
         layers.RandomRotation((-0.5, 0.5)),
-        layers.RandomZoom((-0.5, 0.5), (-0.5, 0.5)),
+        # layers.RandomZoom((-0.5, 0.5), (-0.5, 0.5)),
         layers.Rescaling(1.0/255),
         layers.BatchNormalization(axis=1),
+        
+        layers.Conv2D(16, (7, 7),
+          activation = 'relu',
+          kernel_initializer = initializers.RandomUniform()
+        ),
+        layers.MaxPooling2D((2, 2)),
         
         layers.Conv2D(32, (5, 5),
           activation = 'relu',
@@ -49,25 +55,26 @@ class DefaultModel:
         
         layers.Flatten(),
         
-        layers.Dropout(0.5),
+        layers.Dropout(0.25),
+        layers.Dense(256,
+          activation = 'relu',
+          kernel_initializer = initializers.RandomUniform()
+        ),
+        
+        layers.Dropout(0.25),
+        layers.Dense(256,
+          activation = 'relu',
+          kernel_initializer = initializers.RandomUniform()
+        ),
+        
+        layers.Dropout(0.25),
+        layers.Dense(256,
+          activation = 'relu',
+          kernel_initializer = initializers.RandomUniform()
+        ),
+        
+        layers.Dropout(0.25),
         layers.Dense(128,
-          activation = 'relu',
-          kernel_initializer = initializers.RandomUniform()
-        ),
-        
-        layers.Dense(128,
-          activation = 'relu',
-          kernel_initializer = initializers.RandomUniform()
-        ),
-        
-        layers.Dropout(0.5),
-        layers.Dense(64,
-          activation = 'relu',
-          kernel_initializer = initializers.RandomUniform()
-        ),
-        
-        layers.Dropout(0.5),
-        layers.Dense(32,
           activation = 'relu',
           kernel_initializer = initializers.RandomUniform()
         ),

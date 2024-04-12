@@ -137,7 +137,7 @@ def binarize(input):
 def fourier(input):
   return mag(fft(input))
 
-def randomizeThickness(img, min=-50, max=50):
+def randomizeThickness(img, min=-40, max=40):
   val = random.randrange(min, max, 1)
   if val < 0:
     temp = np.abs(val)
