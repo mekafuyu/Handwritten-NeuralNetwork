@@ -3,12 +3,12 @@ import cv2 as cv
 import numpy as np
 import matplotlib.pyplot as plt
 from utils import *
-import model_utils
+import model_utils_2
 
 epochs = 1000
-batch_size = 8
-patience = 20
-learning_rate = 1e-3
+batch_size = 32
+patience = 30
+learning_rate = 1e-4
 model_path = 'checkpoints/'
 train_path = './handwritten/Img'
 train_set = ''
@@ -20,7 +20,7 @@ train_set = ''
 # transformImage(train_path, 'fourier', fourier)
 # transformImage(train_path + '-binarize', 'fourier', fourier)
 
-model1 = model_utils.DefaultModel(
+model1 = model_utils_2.DefaultModel(
   model_path + f'model{train_set}.keras',
   train_path + train_set,
   epochs,

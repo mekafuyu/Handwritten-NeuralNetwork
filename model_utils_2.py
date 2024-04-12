@@ -29,67 +29,35 @@ class DefaultModel:
     else:
       self.model = models.Sequential([
         layers.Resizing(128, 128),
-        # layers.RandomCrop(100, 100),
-        layers.RandomRotation((-0.5, 0.5)),
-        # layers.RandomZoom((-0.5, 0.5), (-0.5, 0.5)),
         layers.Rescaling(1.0/255),
-        layers.BatchNormalization(axis=1),
-        
-        layers.Conv2D(32, (7, 7),
-          activation = 'relu',
-          kernel_initializer = initializers.RandomUniform()
+        layers.RandomFlip("horizontal_and_vertical"),
+        layers.Conv2D(32, (7, 7), 
+            activation = 'relu',
+            kernel_initializer = initializers.RandomNormal()              
         ),
         layers.MaxPooling2D((2, 2)),
-        
-        layers.Conv2D(48, (5, 5),
-          activation = 'relu',
-          kernel_initializer = initializers.RandomUniform()
-        ),
-        layers.MaxPooling2D((2, 2)),
-        
         layers.Conv2D(64, (3, 3),
-          activation = 'relu',
-          kernel_initializer = initializers.RandomUniform()
+            activation = 'relu',
+            kernel_initializer = initializers.RandomNormal()
         ),
         layers.MaxPooling2D((2, 2)),
-        
         layers.Flatten(),
-        
-        layers.Dropout(0.25),
+        layers.BatchNormalization(),
+        layers.GaussianNoise(0.5),
+        layers.Dense(128,
+            activation = 'relu',
+            kernel_initializer = initializers.RandomNormal()
+        ),
+        layers.Dropout(0.5),
         layers.Dense(256,
-          activation = 'relu',
-          kernel_initializer = initializers.RandomUniform()
+            activation = 'relu',
+            kernel_initializer = initializers.RandomNormal()
         ),
-        
-        layers.Dropout(0.25),
-        layers.Dense(256,
-          activation = 'relu',
-          kernel_initializer = initializers.RandomUniform()
-        ),
-        
-        layers.Dropout(0.25),
-        layers.Dense(256,
-          activation = 'relu',
-          kernel_initializer = initializers.RandomUniform()
-        ),
-        
-        layers.Dropout(0.25),
-        layers.Dense(256,
-          activation = 'relu',
-          kernel_initializer = initializers.RandomUniform()
-        ),
-        
-        layers.Dropout(0.25),
-        layers.Dense(512,
-          activation = 'relu',
-          kernel_initializer = initializers.RandomUniform()
-        ),
-        
         layers.Dense(self._classes,
-          activation = 'sigmoid',
-          kernel_initializer = initializers.RandomUniform()
+            activation = 'sigmoid',
+            kernel_initializer = initializers.RandomNormal()
         )
-      ])
+    ])
     
     if not self._exists:
       self.model.compile(
