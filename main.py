@@ -3,7 +3,7 @@ import cv2 as cv
 import numpy as np
 import matplotlib.pyplot as plt
 from utils import *
-import model_utils_2
+import model_utils_2 as mdu
 
 epochs = 1000
 batch_size = 32
@@ -20,7 +20,7 @@ train_set = ''
 # transformImage(train_path, 'fourier', fourier)
 # transformImage(train_path + '-binarize', 'fourier', fourier)
 
-model1 = model_utils_2.DefaultModel(
+model1 = mdu.DefaultModel(
   model_path + f'model{train_set}.keras',
   train_path + train_set,
   epochs,

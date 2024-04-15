@@ -30,33 +30,33 @@ class DefaultModel:
       self.model = models.Sequential([
         layers.Resizing(128, 128),
         layers.Rescaling(1.0/255),
-        layers.Conv2D(32, (7, 7), 
-            activation = 'relu',
-            kernel_initializer = initializers.RandomNormal()              
+        layers.Conv2D(62, (3, 3),
+          activation = 'relu',
+          kernel_initializer = initializers.RandomNormal()
         ),
         layers.MaxPooling2D((2, 2)),
-        layers.Conv2D(64, (3, 3),
-            activation = 'relu',
-            kernel_initializer = initializers.RandomNormal()
+        layers.Conv2D(124, (3, 3),
+          activation = 'relu',
+          kernel_initializer = initializers.RandomNormal()
         ),
         layers.MaxPooling2D((2, 2)),
-        layers.Flatten(),
         layers.BatchNormalization(),
-        layers.GaussianNoise(0.5),
-        layers.Dense(128,
-            activation = 'relu',
-            kernel_initializer = initializers.RandomNormal()
+        layers.Flatten(),
+        layers.Dropout(0.5),
+        layers.Dense(248,
+          activation = 'relu',
+          kernel_initializer = initializers.RandomNormal()
         ),
         layers.Dropout(0.5),
-        layers.Dense(256,
-            activation = 'relu',
-            kernel_initializer = initializers.RandomNormal()
+        layers.Dense(124,
+          activation = 'relu',
+          kernel_initializer = initializers.RandomNormal()
         ),
-        layers.Dense(self._classes,
-            activation = 'sigmoid',
-            kernel_initializer = initializers.RandomNormal()
+        layers.Dense(62,
+          activation = 'sigmoid',
+          kernel_initializer = initializers.RandomNormal()
         )
-    ])
+        ])
     
     if not self._exists:
       self.model.compile(
