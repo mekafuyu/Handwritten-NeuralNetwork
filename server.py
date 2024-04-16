@@ -2,6 +2,7 @@ import os
 import cv2 as cv
 import numpy as np
 from flask import Flask, flash, request, redirect, url_for
+from flask_cors import cross_origin
 from werkzeug.utils import secure_filename
 from keras import models
 import utils
@@ -16,6 +17,7 @@ app.config['SECRET_KEY'] = 'justfortestingsowhatever'
 model = models.load_model("checkpoints/model.keras")
 
 @app.route("/", methods=["GET", "POST"])
+@cross_origin()
 def upload_image():
   if request.method == 'POST':
     if 'file' not in request.files:
