@@ -31,6 +31,7 @@ def upload_image():
     path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     file.save(path)
     im = cv.imread(path)
+    im = cv.resize(im, (128, 128))
     im = cv.cvtColor(im, cv.COLOR_BGR2GRAY)
     _, im = cv.threshold(im, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
     im = cv.cvtColor(im, cv.COLOR_GRAY2BGR)

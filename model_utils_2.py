@@ -28,27 +28,51 @@ class DefaultModel:
       self.model = models.load_model(self._model_path)
     else:
       self.model = models.Sequential([
-        layers.Resizing(128, 128),
+        # layers.Resizing(128, 128),
+        layers.RandomRotation((-0.15, 0.15)),
         layers.Rescaling(1.0/255),
-        layers.Conv2D(32, (7, 7), 
+        
+        layers.Conv2D(31, (7, 7), 
             activation = 'relu',
             kernel_initializer = initializers.RandomNormal()              
         ),
         layers.MaxPooling2D((2, 2)),
-        layers.Conv2D(64, (3, 3),
+        layers.Conv2D(62, (5, 5),
             activation = 'relu',
             kernel_initializer = initializers.RandomNormal()
         ),
         layers.MaxPooling2D((2, 2)),
-        layers.Flatten(),
-        layers.BatchNormalization(),
-        layers.GaussianNoise(0.5),
-        layers.Dense(128,
+        layers.Conv2D(124, (3, 3),
             activation = 'relu',
             kernel_initializer = initializers.RandomNormal()
         ),
-        layers.Dropout(0.5),
-        layers.Dense(256,
+        layers.MaxPooling2D((2, 2)),
+        
+        layers.Flatten(),
+        layers.BatchNormalization(),
+        layers.GaussianNoise(0.5),
+        layers.Dropout(0.25),
+        layers.Dense(310,
+            activation = 'relu',
+            kernel_initializer = initializers.RandomNormal()
+        ),
+        layers.Dropout(0.25),
+        layers.Dense(310,
+            activation = 'relu',
+            kernel_initializer = initializers.RandomNormal()
+        ),
+        layers.Dropout(0.25),
+        layers.Dense(310,
+            activation = 'relu',
+            kernel_initializer = initializers.RandomNormal()
+        ),
+        layers.Dropout(0.25),
+        layers.Dense(310,
+            activation = 'relu',
+            kernel_initializer = initializers.RandomNormal()
+        ),
+        layers.Dropout(0.25),
+        layers.Dense(310,
             activation = 'relu',
             kernel_initializer = initializers.RandomNormal()
         ),
