@@ -2,6 +2,9 @@ import cv2 as cv
 import numpy as np
 from datetime import datetime
 
+def sort_func(e):
+    return(e[0][0])
+
 def segment(im):
     newImage = cv.cvtColor(im, cv.COLOR_BGR2GRAY)
     
@@ -25,7 +28,6 @@ def segment(im):
                     upper, left, bottom, right = expand(newImage, upper, left, bottom, right, currX, currY, queue, figure_pixels)
                     
                 figures_pixels.append(figure_pixels)
-                figures.append(((upper, left), (bottom, right)))
                 
                 newfig = np.zeros((right - left + 1, bottom - upper + 1, 1), np.uint8)
                 newfig[newfig == 0] = 255
@@ -53,10 +55,12 @@ def segment(im):
                     for x in range(len(newfig)):
                         for y in range(len(newfig[x])):
                             ofcFig[x + 10][y + offset] = newfig[x][y]
-                    
-                # cv.destroyAllWindows()
-                cv.imwrite('upload_folder/teste{0}.png'.format(len(figures)), ofcFig)
-
+                
+                path_newimg = 'upload_folder/{0}.png'.format(len(figures))
+                figures.append(((upper, left), (bottom, right), path_newimg))
+                cv.imwrite(path_newimg, ofcFig)
+                
+    figures.sort(key=sort_func)
     return figures
 
 def expand(im, u, l, b, r, x, y, queue: list, pixels: list):
@@ -77,38 +81,30 @@ def expand(im, u, l, b, r, x, y, queue: list, pixels: list):
         pixels.append((x, y))
     return u, l, b, r
 
+# im = cv.imread('./upload_folder/teste.png')
+# # im = cv.bitwise_not(im)
+# cv.imshow('result', im)
+# cv.waitKey(0)
+# cv.destroyAllWindows()
+# # im = cv.resize(im, (128, 128))
+# start = datetime.now()
+# figures = segment(im)
+# print((datetime.now() - start).microseconds)
 
+# for i, figure in enumerate(figures):
+#     x = int((figure[1][0] - figure[0][0]) / 2 + figure[0][0])
+#     y = int((figure[1][1] - figure[0][1]) / 2 + figure[0][1])
+#     image = cv.putText(
+#         im,
+#         str(i),
+#         (x, y),
+#         cv.FONT_HERSHEY_SIMPLEX,
+#         1,
+#         (255, 0, 0),
+#         1,
+#         cv.LINE_AA) 
+#     cv.rectangle(im, figure[0], figure[1], (255 / len(figures) * i, 255 / len(figures) * i, 255), 3)
 
-
-im = cv.imread('./upload_folder/teste.png')
-# im = cv.bitwise_not(im)
-cv.imshow('result', im)
-cv.waitKey(0)
-cv.destroyAllWindows()
-# im = cv.resize(im, (128, 128))
-start = datetime.now()
-figures = segment(im)
-print((datetime.now() - start).microseconds)
-
-def sort_func(e):
-    return(e[0][0])
-
-figures.sort(key=sort_func)
-
-for i, figure in enumerate(figures):
-    x = int((figure[1][0] - figure[0][0]) / 2 + figure[0][0])
-    y = int((figure[1][1] - figure[0][1]) / 2 + figure[0][1])
-    image = cv.putText(
-        im,
-        str(i),
-        (x, y),
-        cv.FONT_HERSHEY_SIMPLEX,
-        1,
-        (255, 0, 0),
-        1,
-        cv.LINE_AA) 
-    cv.rectangle(im, figure[0], figure[1], (255 / len(figures) * i, 255 / len(figures) * i, 255), 3)
-
-cv.imshow('result', im)
-cv.waitKey(0)
-cv.destroyAllWindows()
+# cv.imshow('result', im)
+# cv.waitKey(0)
+# cv.destroyAllWindows()
