@@ -40,24 +40,25 @@ def segment(im):
                 width, heigth, _ = newfig.shape
                 
                 if heigth > width:
-                    width = int(108 / heigth * width)
-                    heigth = 108
+                    width = int(128 / heigth * width)
+                    heigth = 128
                     newfig = cv.resize(newfig, (heigth, width))
                     offset = int((128 - width) / 2)
                     for x in range(len(newfig)):
                         for y in range(len(newfig[x])):
-                            ofcFig[x + offset][y + 10] = newfig[x][y]
+                            ofcFig[x + offset - 1][y] = newfig[x][y]
                 else:
-                    heigth = int(108 / width * heigth)
-                    width = 108
+                    heigth = int(128 / width * heigth)
+                    width = 128
                     newfig = cv.resize(newfig, (heigth, width))
                     offset = int((128 - heigth) / 2)
                     for x in range(len(newfig)):
                         for y in range(len(newfig[x])):
-                            ofcFig[x + 10][y + offset] = newfig[x][y]
+                            ofcFig[x][y + offset - 1] = newfig[x][y]
                 
                 path_newimg = 'upload_folder/{0}.png'.format(len(figures))
                 figures.append(((upper, left), (bottom, right), path_newimg))
+                _, ofcFig = cv.threshold(ofcFig, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
                 cv.imwrite(path_newimg, ofcFig)
                 
     figures.sort(key=sort_func)
@@ -80,31 +81,3 @@ def expand(im, u, l, b, r, x, y, queue: list, pixels: list):
         im[x][y] = 128
         pixels.append((x, y))
     return u, l, b, r
-
-# im = cv.imread('./upload_folder/teste.png')
-# # im = cv.bitwise_not(im)
-# cv.imshow('result', im)
-# cv.waitKey(0)
-# cv.destroyAllWindows()
-# # im = cv.resize(im, (128, 128))
-# start = datetime.now()
-# figures = segment(im)
-# print((datetime.now() - start).microseconds)
-
-# for i, figure in enumerate(figures):
-#     x = int((figure[1][0] - figure[0][0]) / 2 + figure[0][0])
-#     y = int((figure[1][1] - figure[0][1]) / 2 + figure[0][1])
-#     image = cv.putText(
-#         im,
-#         str(i),
-#         (x, y),
-#         cv.FONT_HERSHEY_SIMPLEX,
-#         1,
-#         (255, 0, 0),
-#         1,
-#         cv.LINE_AA) 
-#     cv.rectangle(im, figure[0], figure[1], (255 / len(figures) * i, 255 / len(figures) * i, 255), 3)
-
-# cv.imshow('result', im)
-# cv.waitKey(0)
-# cv.destroyAllWindows()

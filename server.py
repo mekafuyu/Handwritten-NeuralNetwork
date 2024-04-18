@@ -15,7 +15,18 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'justfortestingsowhatever'
 
-model = models.load_model("checkpoints/model.keras")
+model = models.load_model("checkpoints/989-995.keras")
+test = []
+alphabet = [
+  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+  'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+  'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+for i in range(10):
+  test.append((str(ord(str(i))), str(i)))
+for i in alphabet:
+  test.append((str(ord(i)), i))
+test.sort()
 
 @app.route("/", methods=["GET", "POST"])
 @cross_origin()
@@ -52,7 +63,10 @@ def upload_image():
       _, im = cv.threshold(im, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
       im = cv.cvtColor(im, cv.COLOR_GRAY2BGR)
       im = np.expand_dims(im, axis=0)
-      res.append(utils.dict_letras_ofc[str(np.argmax(model.predict(im)) + 1).zfill(3)])
+      # res.append(utils.dict_letras_ofc[str( + 1).zfill(3)])
+      pred = np.argmax(model.predict(im))
+      res.append(test[pred][1])
     typed = ''.join(res)
     return {'typed': typed, 'check': typed.lower() == nome.lower()}
   return "a"
+
